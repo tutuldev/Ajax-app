@@ -78,8 +78,8 @@
                                 placeholder="your institute">
                         </div>
 
-
-                        <button type="submit" id="addBtn" class="btn btn-primary">Add</button>
+                        <p type="submit" id="addBtn" onclick="addData()" class="btn btn-primary">Add</p>
+                        {{-- <button type="submit" id="" onclick="addData()" class="btn btn-primary">Add</button> --}}
                         <button type="submit" id="updateBtn" class="btn btn-primary">Update</button>
                     </form>
                 </div>
@@ -132,6 +132,24 @@
             })
         }
         allData();
+        function addData(){
+           var name = $('#name').val();
+           var title = $('#title').val();
+           var institute = $('#institute').val();
+
+           $.ajax({
+            type:"post",
+            dataType:"json",
+            data:{name:name,title:title,institute:institute},
+            url:"/teacher/store/",
+            success: function(data){
+                allData();
+
+                console.log('success fully data added');
+            }
+           })
+
+        }
     </script>
 
 </body>

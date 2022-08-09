@@ -20,3 +20,4 @@ Route::get('/', function () {
 
 Route::get('/ajax',[TeacherController::class,'index']);
 Route::get('/teacher/all',[TeacherController::class,'allData']);
+Route::post('/teacher/store/',[TeacherController::class,'storeData']);
