@@ -81,10 +81,11 @@
                                 <span class="text-danger" id="instituteError"></span>
                         </div>
 
-                        <button>test</button>
+                        <input type="hidden" id="id">
                         <p type="submit" id="addBtn" onclick="addData()" class="btn btn-primary">Add</p>
+                        <p type="submit" id="updateBtn" onclick="updateData()" class="btn btn-primary">Update</p>
                         {{-- <button type="submit" id="addBtn" onclick="addData()" class="btn btn-primary">Add</button> --}}
-                        <button type="submit" id="updateBtn" class="btn btn-primary">Update</button>
+                        {{-- <button type="submit" id="updateBtn" class="btn btn-primary">Update</button> --}}
                     </form>
                 </div>
 
@@ -100,7 +101,7 @@
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
     </script>
     <script>
-        $('#addt').show();
+        $('#addT').show();
         $('#updateT').hide();
         $('#addBtn').show();
         $('#updateBtn').hide();
@@ -125,7 +126,7 @@
                         data = data + "<td>"+ value.title+"</td>"
                         data = data + "<td>"+ value.institute+"</td>"
                         data = data + "<td>"
-                        data = data + "<button class='btn btn-sm btn-primary ms-2'>Edit</button>"
+                        data = data + "<button class='btn btn-sm btn-primary ms-2' onclick='editData("+value.id+")'>Edit</button>"
                         data = data + "<button class='btn btn-sm btn-danger ms-2'>Delete</button>"
                         data = data + "</td>"
                         data = data + "</tr>"
@@ -170,6 +171,58 @@
             }
            })
 
+        }
+        function editData(id){
+            // alert(id);
+            $.ajax({
+                type:"GET",
+                dataType:"json",
+                url:"/teacher/edit/"+id,
+                success: function(data){
+        $('#addT').hide();
+        $('#updateT').show();
+        $('#addBtn').hide();
+        $('#updateBtn').show();
+                    $('#id').val(data.id);
+                    $('#name').val(data.name);
+                     $('#title').val(data.title);
+                      $('#institute').val(data.institute);
+                    console.log(data);
+                }
+            })
+        }
+
+         function updateData(){
+            var id = $('#id').val();
+            var name = $('#name').val();
+           var title = $('#title').val();
+           var institute = $('#institute').val();
+
+
+           $.ajax({
+            type:"post",
+            dataType:"json",
+            data:{name:name,title:title,institute:institute},
+            url:"/teacher/update/"+id,
+            success: function(data){
+                $('#addT').show();
+        $('#updateT').hide();
+        $('#addBtn').show();
+        $('#updateBtn').hide();
+                clearData();
+                allData();
+
+                console.log('success fully data added');
+            },
+            error: function (error){
+                $('#nameError').text(error.responseJSON.errors.name);
+                $('#titleError').text(error.responseJSON.errors.title);
+                $('#instituteError').text(error.responseJSON.errors.institute);
+                // console.log(error.responseJSON.errors.name);
+                // console.log(error.responseJSON.errors.title);
+                // console.log(error.responseJSON.errors.institute);
+            }
+           })
         }
     </script>
 
