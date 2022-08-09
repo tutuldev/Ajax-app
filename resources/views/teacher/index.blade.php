@@ -66,20 +66,24 @@
                             <label for="name" class="form-label">Name</label>
                             <input type="text" class="form-control" id="name" aria-describedby="emailHelp"
                                 placeholder="your name">
+                                <span class="text-danger" id="nameError"></span>
                         </div>
                         <div class="mb-3">
                             <label for="title" class="form-label">Title</label>
                             <input type="text" class="form-control" id="title" aria-describedby="emailHelp"
                                 placeholder="your title">
+                                <span class="text-danger" id="titleError"></span>
                         </div>
                         <div class="mb-3">
                             <label for="institute" class="form-label">Institute</label>
                             <input type="text" class="form-control" id="institute" aria-describedby="emailHelp"
                                 placeholder="your institute">
+                                <span class="text-danger" id="instituteError"></span>
                         </div>
 
+                        <button>test</button>
                         <p type="submit" id="addBtn" onclick="addData()" class="btn btn-primary">Add</p>
-                        {{-- <button type="submit" id="" onclick="addData()" class="btn btn-primary">Add</button> --}}
+                        {{-- <button type="submit" id="addBtn" onclick="addData()" class="btn btn-primary">Add</button> --}}
                         <button type="submit" id="updateBtn" class="btn btn-primary">Update</button>
                     </form>
                 </div>
@@ -132,6 +136,14 @@
             })
         }
         allData();
+        function clearData(){
+          $('#name').val('');
+            $('#title').val('');
+             $('#institute').val('');
+             $('#nameError').text('');
+                $('#titleError').text('');
+                $('#instituteError').text('');
+        }
         function addData(){
            var name = $('#name').val();
            var title = $('#title').val();
@@ -143,9 +155,18 @@
             data:{name:name,title:title,institute:institute},
             url:"/teacher/store/",
             success: function(data){
+                clearData();
                 allData();
 
                 console.log('success fully data added');
+            },
+            error: function (error){
+                $('#nameError').text(error.responseJSON.errors.name);
+                $('#titleError').text(error.responseJSON.errors.title);
+                $('#instituteError').text(error.responseJSON.errors.institute);
+                // console.log(error.responseJSON.errors.name);
+                // console.log(error.responseJSON.errors.title);
+                // console.log(error.responseJSON.errors.institute);
             }
            })
 
